@@ -1,0 +1,53 @@
+# In this SQL query example, I am analyzing data from stock inventory and sales to provide insights for inventory management along with product performance.
+
+# 1. How many units of each product are currently in stock?
+SELECT product_name, SUM(inventory_units) AS total_stock
+FROM Inventory
+GROUP BY product_name;
+
+# 2. Which products are running low on stock (less than 10 units)?
+SELECT product_name
+FROM Inventory
+WHERE inventory_units < 10;
+
+# 3. Calculating the total revenue and profit for each product category.
+SELECT p.product_category, SUM(sales.price * sales.quantity) AS total_revenue,
+       SUM((sales.price - cost.price) * sales.quantity) AS total_profit
+FROM Sales sales
+JOIN Products p ON sales.product_id = p.product_id
+JOIN Costs cost ON p.product_id = cost.product_id
+GROUP BY p.product_category;
+
+# 4. Identifying the top-selling product in terms of revenue.
+SELECT p.product_name, SUM(s.price * s.quantity) AS total_revenue
+FROM Sales s
+JOIN Products p ON s.product_id = p.product_id
+GROUP BY p.product_name
+ORDER BY total_revenue DESC
+LIMIT 1;
+
+# 5. Calculating the average order value for each month.
+SELECT MONTH(order_date) AS order_month, AVG(order_total) AS avg_order_value
+FROM Orders
+GROUP BY order_month;
+
+# 6. Which product categories have shown a consistent increase in sales over the last three months?
+SELECT p.product_category
+FROM Sales s
+JOIN Products p ON s.product_id = p.product_id
+WHERE s.order_date >= DATEADD(MONTH, -3, GETDATE())
+GROUP BY p.product_category
+HAVING COUNT(DISTINCT s.order_id) > 1;
+
+# How this can answer or aid stakeholder inquiries: 
+
+I utilized SQL queries that are aimed to aid inventory management and understand the overall product performance. The first two queries in SQL
+provide insights into the current stock levels and products that require immediate attention for replenishment. This information is crucial for ensuring products are available to meet consumer demands. 
+
+Next, I calculated the total revenue and profit for each product category, enabling the identification of which product categories are most financially successful and where adjustments may be needed.
+The top-selling products in terms of revenue where identified, allowing focus on products that moved the north-star metric, this insight aids marketing strategies. 
+Next, the average order value per month was identified, this gives a clearer understanding of customer spending patterns over time, which can inform pricing strategies.
+Finally, I identified product categories that were consistently performing well over the last three months, which allows for the allocation of resources and marketing efforts to be sustainable. 
+
+Through analyzing the inventory and sales data, informed decisions about inventory restocking, pricing strategies, and product promotion, 
+can ultimately optimize ops and revenue generation. Furthermore, I made visualizations generating insights to guide the decision-making process.
