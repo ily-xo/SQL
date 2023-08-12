@@ -1,0 +1,70 @@
+# Creating the table
+CREATE TABLE Orders (
+    OrderDate DATE,
+    Category VARCHAR(255),
+    ListPricePerUnit DECIMAL(10, 2),
+    PurchasePricePerUnit DECIMAL(10, 2),
+    Quantity INT,
+    ItemSubtotal DECIMAL(10, 2),
+    ItemSubtotalTax DECIMAL(10, 2),
+    ItemTotal DECIMAL(10, 2)
+);
+# Inserting the data into the Orders table
+INSERT INTO Orders (OrderDate, Category, ListPricePerUnit, PurchasePricePerUnit, Quantity, ItemSubtotal, ItemSubtotalTax, ItemTotal)
+VALUES
+    ('2023-02-03', 'POWER_INVERTER', 49.99, 49.99, 1, 49.99, 4.12, 54.11),
+    ('2023-01-28', 'CAMERA_CONTINUOUS_LIGHT', 0.00, 39.99, 1, 39.99, 3.30, 43.29),
+    ('2023-01-17', 'DRINKING_CUP', 47.70, 35.74, 1, 35.74, 2.95, 38.69),
+    ('2023-01-17', 'UNDERPANTS', 20.00, 15.50, 1, 15.50, 1.28, 16.78),
+    ('2023-01-17', 'UNDERPANTS', 20.00, 15.56, 1, 15.56, 1.28, 16.84),
+    ('2023-01-17', 'DRINKING_CUP', 42.00, 16.10, 1, 16.10, 1.33, 17.43),
+    ('2023-01-17', 'UNDERPANTS', 20.00, 16.93, 1, 16.93, 1.40, 18.33),
+    ('2023-01-17', 'DRINKING_CUP', 42.00, 16.63, 1, 16.63, 1.37, 18.00),
+    ('2023-01-16', 'SHOES', 31.98, 24.98, 1, 24.98, 2.06, 27.04),
+    ('2023-01-15', 'BUILDING_MATERIAL', 16.10, 12.98, 1, 12.98, 1.07, 14.05),
+    ('2023-01-15', 'BUILDING_MATERIAL', 22.68, 10.88, 1, 10.88, 0.90, 11.78),
+    ('2023-01-15', 'VALVE', 12.00, 7.87, 1, 7.87, 0.65, 8.52),
+    ('2023-01-15', 'UNDERPANTS', 35.00, 30.00, 1, 30.00, 2.48, 32.48),
+    ('2023-01-15', 'UNDERPANTS', 35.00, 28.95, 1, 28.95, 2.39, 31.34),
+    ('2023-01-15', 'SHOES', 31.98, 24.98, 1, 24.98, 2.06, 27.04),
+    ('2023-01-15', 'APPAREL_GLOVES', 11.99, 8.99, 1, 8.99, 0.74, 9.73),
+    ('2023-01-15', 'SCARF', 25.00, 11.99, 1, 11.99, 0.99, 12.98),
+    ('2023-01-15', 'SCARF', 25.00, 11.99, 1, 11.99, 0.99, 12.98),
+    ('2023-01-12', 'UNDERPANTS', 35.00, 34.63, 1, 34.63, 2.86, 37.49),
+    ('2023-01-12', 'UNDERPANTS', 20.00, 20.00, 1, 20.00, 1.65, 21.65),
+    ('2023-01-12', 'SPORTING_GOODS', 0.00, 11.99, 1, 11.99, 0.99, 12.98),
+    ('2023-01-12', 'ANIMAL_COLLAR', 25.88, 13.49, 1, 13.49, 1.11, 14.60),
+    ('2023-01-07', 'KEYBOARD_MOUSE_SET', 99.99, 43.00, 1, 43.00, 3.55, 46.55);
+
+# Calculate total sales by category
+SELECT Category, SUM(ItemTotal) AS TotalSales
+FROM Orders
+GROUP BY Category
+ORDER BY TotalSales DESC;
+
+# Calculate average purchase price per unit by category
+SELECT Category, AVG(PurchasePricePerUnit) AS AvgPurchasePrice
+FROM Orders
+GROUP BY Category
+ORDER BY AvgPurchasePrice DESC;
+
+# Calculate total sales by year and month
+SELECT YEAR(OrderDate) AS Year, MONTH(OrderDate) AS Month, SUM(ItemTotal) AS TotalSales
+FROM Orders
+GROUP BY Year, Month
+ORDER BY Year, Month;
+
+# Calculate total sales and total tax by the year
+SELECT YEAR(OrderDate) AS Year, SUM(ItemTotal) AS TotalSales, SUM(ItemSubtotalTax) AS TotalTax
+FROM Orders
+GROUP BY Year
+ORDER BY Year;
+
+# Calculate the average item subtotal and total tax by category
+SELECT Category, AVG(ItemSubtotal) AS AvgItemSubtotal, SUM(ItemSubtotalTax) AS TotalTax
+FROM Orders
+GROUP BY Category
+ORDER BY AvgItemSubtotal DESC;
+
+
+
