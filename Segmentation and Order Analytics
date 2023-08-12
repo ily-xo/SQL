@@ -1,0 +1,51 @@
+# In this SQL example, I am analyzing consumer and order data from a database to provide insights for segmentation and product performance.
+
+# 1. How many unique customers placed orders in December?
+SELECT COUNT(DISTINCT custid)
+FROM COM_DB.DecSales;
+
+# 2. How many of those orders were for a Laptop and included an extended warranty?
+SELECT COUNT(orderid)
+FROM COM_DB.DecSales
+WHERE Product = 'Laptop' AND ExtendedWarranty = 'Yes';
+
+# 3. Selecting the customer account numbers for all the orders that were placed in January and had an order value greater than $500.
+SELECT cust.acctnum
+FROM COM_DB.customers cust
+INNER JOIN COM_DB.JanSales Jan ON cust.order_id = Jan.orderid
+WHERE Jan.order_total > 500;
+
+# 4. Identifying the most expensive product sold in December and its price.
+SELECT DISTINCT Product, price
+FROM COM_DB.DecSales
+WHERE price = (SELECT MAX(price) FROM COM_DB.DecSales);
+
+# 5. What is the total revenue and profit for each product sold in December?
+SELECT p.product_name, SUM(sales.price * sales.quantity) AS total_revenue,
+       SUM((sales.price - cost.price) * sales.quantity) AS total_profit
+FROM COM_DB.DecSales sales
+JOIN COM_DB.Products p ON sales.product_id = p.product_id
+JOIN COM_DB.Costs cost ON p.product_id = cost.product_id
+GROUP BY p.product_name;
+
+# 6. Listing all the products sold in California in January, and include the average quantity sold per order.
+SELECT DISTINCT Product, SUM(Quantity) AS total_quantity, AVG(Quantity) AS avg_quantity_per_order
+FROM COM_DB.JanSales
+WHERE location LIKE '%California%'
+GROUP BY Product;
+
+# In this SQL query I am providing a deeper understanding of consumer behavior and product performance.
+
+# Calculating the number of unique customers who placed orders in December helps to gauge customer reach and engagement during the holiday season.
+The second query identifies orders for laptops that also included extended warranties, offering insights into consumer preferences for product protection.
+In additon I implement clustering algorithms to identify customer account numbers for orders with higher values, helping to segment customers for personalized campaigns.
+Furthermore, recency of the last purchase consumers can be divided into return consumer, occasional buyers, and one-time consumers. 
+
+# Through identification of the high-ticket products sold, I provide insights into premium product performance and potential opportunities. 
+By calculating both revenue and profit for each product, I enable the business to assess not only revenue generation but also the overall profitability of each product.
+
+# Offering a detailed view of product performance in California, including the average quantity sold per order, informs both inventory management and stock allocation strategies.
+
+# By utilizing these SQL queries, I am able to gauge a comprehensive understanding of consumer behavior, product popularity, and revenue generation, facilitating data-driven decision-making. 
+Finally, I generated reports using Power BI and Tableau from these insights, to help stakeholders in identifying trends, optimizing inventory, and developing targeted marketing strategies to maximize 
+the overall growth of the north-star metric and aid critical KPIs i.e., MRR, ARPC, churn-rate, retention, and customer satisfaction (CSAT, NPS).
