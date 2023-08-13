@@ -1,0 +1,53 @@
+# Analyzing valuable insights from Airbnb booking data 
+
+# 1. Calculating the average price of listings in each neighborhood group.
+SELECT neighbourhood_group, AVG(price) AS avg_price
+FROM AirbnbData
+GROUP BY neighbourhood_group
+ORDER BY avg_price DESC;
+
+# 2. Identifying the top 10 hosts with the most listings.
+SELECT host_id, host_name, COUNT(*) AS num_listings
+FROM AirbnbData
+GROUP BY host_id, host_name
+ORDER BY num_listings DESC
+LIMIT 50;
+
+# 3. Calculating the average number of reviews per month for each neighborhood group.
+SELECT neighbourhood_group, AVG(reviews_per_month) AS avg_reviews_per_month
+FROM AirbnbData
+GROUP BY neighbourhood_group
+ORDER BY avg_reviews_per_month DESC;
+
+# 4. The top 10 neighborhoods with the highest availability.
+SELECT neighbourhood, AVG(availability_365) AS avg_availability
+FROM AirbnbData
+GROUP BY neighbourhood
+ORDER BY avg_availability DESC
+LIMIT 100;
+
+# 5. The average price of different room types.
+SELECT room_type, AVG(price) AS avg_price
+FROM AirbnbData
+GROUP BY room_type
+ORDER BY avg_price DESC;
+
+# 6. Identifying the hosts with the highest total revenue (price * minimum_nights).
+SELECT host_id, host_name, SUM(price * minimum_nights) AS total_revenue
+FROM AirbnbData
+GROUP BY host_id, host_name
+ORDER BY total_revenue DESC
+LIMIT 50;
+
+# This SQL query calculates the average price of listings in each neighborhood group, helping to identify which neighborhood groups tends
+to have higher than average prices (which can offer insights into factors such popularity, location, rarity of find, and guest preference).
+
+# Next, identifing the top 50 hosts with the most listings, provides insight into the most prolific hosts on the platform and provides insights on consumer booking
+preferences. Calculating the average number of reviews per month for each neighborhood group, indicates which neighborhood groups are more popular among guests.
+
+# Identifying the top 100 neighborhoods with the highest availability, gives an idea of the neighborhoods where accommodations are more frequently available.
+Furthermore, calculating the average price of different room types, allows for a comparison of pricing between room types.
+
+# By identifying the hosts with the highest total revenue, based on the product price and minimum nights I am able to gather insights on hosts who generate the most revenue for the platform.
+# Through running these SQL queries, on the Airbnb data, I am able to gather insights on pricing trends, host performance, neighborhood popularity, and availability. 
+Overall, these insights can be utilized to inform business decisions, consumer strategies, and platform optimization.
