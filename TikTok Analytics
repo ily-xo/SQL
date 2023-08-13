@@ -1,0 +1,173 @@
+--Creating the tables
+CREATE TABLE users (
+    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE videos (
+    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    video_url VARCHAR(255) NOT NULL,
+    user_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+CREATE TABLE comments (
+    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    comment_text VARCHAR(255) NOT NULL,
+    video_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY(video_id) REFERENCES videos(id),
+    FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+CREATE TABLE likes (
+    user_id INTEGER NOT NULL,
+    video_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY(user_id) REFERENCES users(id),
+    FOREIGN KEY(video_id) REFERENCES videos(id),
+    PRIMARY KEY(user_id, video_id)
+);
+
+CREATE TABLE follows (
+    follower_id INTEGER NOT NULL,
+    followee_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY(follower_id) REFERENCES users(id),
+    FOREIGN KEY(followee_id) REFERENCES users(id),
+    PRIMARY KEY(follower_id, followee_id)
+);
+
+CREATE TABLE tags (
+    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    tag_name VARCHAR(255) UNIQUE,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE video_tags (
+    video_id INTEGER NOT NULL,
+    tag_id INTEGER NOT NULL,
+    FOREIGN KEY(video_id) REFERENCES videos(id),
+    FOREIGN KEY(tag_id) REFERENCES tags(id),
+    PRIMARY KEY(video_id, tag_id)
+);
+
+--Inserting the sample data
+INSERT INTO users (username, created_at) VALUES
+    ('Charlie_Marley', '2022-05-25 11:09'),
+    ('WindyDay', '2021-12-19 12:15'),
+    ('StreamerGame', '2022-02-07 10:34');
+
+INSERT INTO videos (video_url, user_id, created_at) VALUES
+    ('https://www.tiktok.com/@esenya_miss/video/7259791777811467521', 1, '2023-01-04 12:23'),
+    ('https://www.tiktok.com/@www.02mrn/video/7237986599764561153', 1, '2023-01-04 12:45'),
+    ('https://www.tiktok.com/@charlidamelio/video/7258321739019521323', 2, '2023-01-04 12:54');
+
+INSERT INTO comments (comment_text, video_id, user_id, created_at) VALUES
+    ('Nice video!', 1, 2, '2023-02-04 12:19'),
+    ('Great job!', 1, 3, '2023-02-04 01:29'),
+    ('Awesome content!', 2, 3, '2023-02-04 14:18');
+
+INSERT INTO likes (user_id, video_id, created_at) VALUES
+    (1, 1, '2023-02-04 10:12'),
+    (2, 1, '2023-02-04 08:18'),
+    (3, 1, '2023-02-04 04:56'),
+    (1, 2, '2023-02-04 11:32');
+
+INSERT INTO follows (follower_id, followee_id, created_at) VALUES
+    (1, 2, '2023-03-04 10:23'),
+    (1, 3, '2023-07-04 5:22'),
+    (2, 3, '2023-05-04 4:55');
+
+INSERT INTO tags (tag_name, created_at) VALUES
+    ('funny', '2023-07-04 10:23'),
+    ('cute', '2023-05-04 04:18'),
+    ('trending', '2023-04-04 03:14');
+
+INSERT INTO video_tags (video_id, tag_id) VALUES
+    (1, 1),
+    (1, 3),
+    (2, 2),
+    (3, 3);
+
+
+--1. Counting the number of videos posted by each user
+SELECT u.username, COUNT(v.id) AS video_count
+FROM users u
+LEFT JOIN videos v ON u.id = v.user_id
+GROUP BY u.username;
+
+--2. Finding the most liked videos along with the number of likes
+SELECT v.video_url, COUNT(l.user_id) AS like_count
+FROM videos v
+LEFT JOIN likes l ON v.id = l.video_id
+GROUP BY v.video_url
+ORDER BY like_count DESC
+LIMIT 3;
+
+--3. Calculating the average number of comments per TikTok video
+SELECT AVG(comment_count) AS avg_comments_per_video
+FROM (
+    SELECT v.id, COUNT(c.id) AS comment_count
+    FROM videos v
+    LEFT JOIN comments c ON v.id = c.video_id
+    GROUP BY v.id
+) AS video_comments;
+
+--4. Listing users who have not posted any videos on TikTok
+SELECT u.username
+FROM users u
+LEFT JOIN videos v ON u.id = v.user_id
+WHERE v.id IS NULL;
+
+--5. Finding the top tags used in videos and their usage count
+SELECT t.tag_name, COUNT(vt.video_id) AS tag_usage
+FROM tags t
+LEFT JOIN video_tags vt ON t.id = vt.tag_id
+GROUP BY t.tag_name
+ORDER BY tag_usage DESC
+LIMIT 3;
+
+--6. Identifying users who follow each other
+SELECT f1.follower_id, f1.followee_id
+FROM follows f1
+INNER JOIN follows f2 ON f1.follower_id = f2.followee_id AND f1.followee_id = f2.follower_id
+WHERE f1.follower_id < f1.followee_id;
+
+--7. Finding the most used hashtags
+SELECT t.tag_name,
+       COUNT(vt.tag_id) AS tag_usage
+FROM tags t
+LEFT JOIN video_tags vt ON t.id = vt.tag_id
+GROUP BY t.tag_name
+ORDER BY tag_usage DESC
+LIMIT 5;
+
+--8. Finding the average number of videos posted by users
+SELECT AVG(video_count) AS avg_videos_per_user
+FROM (
+    SELECT u.id, COUNT(v.id) AS video_count
+    FROM users u
+    LEFT JOIN videos v ON u.id = v.user_id
+    GROUP BY u.id
+) AS user_videos;
+
+--9. Finding the most like video on Tiktok
+SELECT v.video_url,
+       COUNT(l.user_id) AS like_count
+FROM videos v
+LEFT JOIN likes l ON v.id = l.video_id
+GROUP BY v.video_url
+ORDER BY like_count DESC
+LIMIT 1;
+
+--10. Finding the day of week that most users register on
+SELECT COUNT(*) AS total,
+       DAYNAME(created_at) AS day
+FROM users
+GROUP BY day
+ORDER BY total DESC
+LIMIT 1;
