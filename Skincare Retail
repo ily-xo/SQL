@@ -1,0 +1,56 @@
+CREATE TABLE skincare (
+    ID INTEGER PRIMARY KEY,
+    name TEXT,
+    cost INTEGER,
+    category TEXT,
+    quantity INTEGER,
+    brand TEXT
+);
+
+
+INSERT INTO skincare VALUES (1, "chemical sunscreen" , 20, "Round Labs", 10);
+INSERT INTO skincare VALUES (2, "mineral sunscreen" , 40, "EltaMD", 10);
+INSERT INTO skincare VALUES (3, "retinol", 15, "Inkey", 12);
+INSERT INTO skincare VALUES (4, "c serum", 35, "Ordinary", 8);
+INSERT INTO skincare VALUES (5, "peptides", 30, "Ordinary", 12);
+INSERT INTO skincare VALUES (6, "ceramides", 18, "Inkey", 13);
+INSERT INTO skincare VALUES (7, "hyaluronic", 42, "Paula", 4);
+INSERT INTO skincare VALUES (8, "lip balm", 15, "Glossier", 11);
+INSERT INTO skincare VALUES (9, "moisturizer", 35, "Kosas", 6);
+INSERT INTO skincare VALUES (10, "toner", 20, "Merit", 15);
+INSERT INTO skincare VALUES (11, "hydration", 29, "Ilia", 12);
+INSERT INTO skincare VALUES (12, "mask", 28, "Kiehl", 11);
+INSERT INTO skincare VALUES (13, "glycolic acid", 25, "Topicals", 13);
+INSERT INTO skincare VALUES (14, "facial spray", 14, "Rose", 15);
+INSERT INTO skincare VALUES (15, "lip balm", 15, "Ilia", 6);
+
+--How many items are in each category?
+SELECT category, COUNT(category) 
+FROM skincare
+GROUP BY category;
+
+--Order all items by cost
+SELECT * 
+FROM skincare
+ORDER BY cost DESC;
+
+--How much does each brand's items cost in total?
+SELECT brand, SUM(cost * quantity) AS total_cost
+FROM skincare
+GROUP BY brand;
+
+--Which skincare items cost less than 25 dollars?
+SELECT name, cost 
+FROM skincare
+WHERE cost < 25;
+
+--Which skincare items cost less than 25 dollars and the brand is INKEY?
+
+SELECT name, cost 
+FROM skincare 
+WHERE cost < 25 
+AND type = 'INKEY';
+
+--Display names and brands concatenated
+SELECT CONCAT(name, ' by ', brand) AS product_info
+FROM skincare;
