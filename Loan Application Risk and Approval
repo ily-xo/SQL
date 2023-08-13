@@ -1,0 +1,46 @@
+# In this SQL Query I am analyzing insights from scrapped loan application data which can be utilized to predict loan approval or rejection rates. 
+This data can aid companies in automating the loan application elibiglity process by mitigating risks to both borrowers along with lenders. 
+
+# 1. Calculating the average loan amount by gender.
+SELECT Gender, AVG(LoanAmount) AS avg_loan_amount
+FROM LoanApplications
+GROUP BY Gender;
+
+# 2. Proportion of loan approvals by education level.
+SELECT Education, COUNT(CASE WHEN Loan_Status = 'Y' THEN 1 END) AS num_approved,
+       COUNT(*) AS total_applications,
+       (COUNT(CASE WHEN Loan_Status = 'Y' THEN 1 END) / COUNT(*)) * 100 AS approval_percentage
+FROM LoanApplications
+GROUP BY Education;
+
+# 3. Calculating the median total income for each property area.
+SELECT Property_Area, PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Total_Income) AS median_total_income
+FROM LoanApplications
+GROUP BY Property_Area;
+
+# 4. Identifying the average loan amount and total income for different credit history statuses.
+SELECT Credit_History, AVG(LoanAmount) AS avg_loan_amount,
+       AVG(Total_Income) AS avg_total_income
+FROM LoanApplications
+GROUP BY Credit_History;
+
+# 5. Calculating the average co-applicant income for married and unmarried applicants.
+SELECT Married, AVG(CoapplicantIncome) AS avg_coapplicant_income
+FROM LoanApplications
+GROUP BY Married;
+
+# 6. Identifying the proportion of loan approvals for different dependents.
+SELECT Dependents, COUNT(CASE WHEN Loan_Status = 'Y' THEN 1 END) AS num_approved,
+       COUNT(*) AS total_applications,
+       (COUNT(CASE WHEN Loan_Status = 'Y' THEN 1 END) / COUNT(*)) * 100 AS approval_percentage
+FROM LoanApplications
+GROUP BY Dependents;
+
+# The average loan amount by gender, provides insights into potential differences in loan amounts based on gender. By identifying the proportion of loan approvals for each education level, we are able to understand how education impacts loan approval rates.
+Calculating the median total income for each property area, gives a sense of income distribution across different property areas.
+# By comparing the average loan amount and total income for different credit history statuses, I am able to highlight the relationship between credit history and loan terms.
+# Identifying the average co-applicant income for married and unmarried applicants, reveals potential financial differences between marital statuses.
+Additionaly, identifying the proportion of loan approvals for different dependents, offers insights into how the number of dependents affects the loan approval rates.
+
+# Finally, this provides critical insights into various aspects of the loan application approval rates, income distribution, and the impact of different factors on loan outcomes. 
+These insights can be used to make informed decisions regarding lending strategies and customer segmentation.
