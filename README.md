@@ -4,8 +4,4 @@ Welcome to my SQL portfolio! I am a first-generation UC Berkeley alumna in techn
 
 ## About Me
 
-I am a passionate about mastering the intricacies of database management, querying, and data manipulation.
-
-## Portfolio Highlights
-
-My portfolio encapsulates a diverse array of SQL projects, each project demonstrates my commitment to producing meaningful results.
+I am a passionate about mastering the intricacies of database management, querying, and data manipulation. My portfolio encapsulates a diverse array of SQL projects, each project demonstrates my commitment to producing meaningful results.
