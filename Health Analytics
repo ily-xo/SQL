@@ -1,0 +1,53 @@
+# In this SQL I am querying a Cardiovascular Diseases Risk Prediction dataset from the CDC to analyze variables that 
+relate to lifestyle factors of an individual or patient that can be attributed to being at low, or high-risk with cardiovascular diseases.
+
+# 1. Calculating the average BMI for each age category.
+SELECT Age_Category, AVG(BMI) AS avg_bmi
+FROM Cardio_Data
+GROUP BY Age_Category;
+
+# 2. Identifying the proportion of individuals with heart disease for each exercise status.
+SELECT Exercise, COUNT(CASE WHEN Heart_Disease = 'Yes' THEN 1 END) AS num_with_heart_disease,
+       COUNT(*) AS total_individuals,
+       (COUNT(CASE WHEN Heart_Disease = 'Yes' THEN 1 END) / COUNT(*)) * 100 AS heart_disease_percentage
+FROM Cardio_Data
+GROUP BY Exercise;
+
+# 3. Calculating the average height and weight for males and females.
+SELECT Sex, AVG(Height_(cm)) AS avg_height, AVG(Weight_(kg)) AS avg_weight
+FROM Cardio_Data
+GROUP BY Sex;
+
+# 4. Identifying the most common smoking history among individuals with diabetes.
+SELECT Smoking_History, COUNT(*) AS num_individuals
+FROM Cardio_Data
+WHERE Diabetes = 'Yes'
+GROUP BY Smoking_History
+ORDER BY num_individuals DESC
+LIMIT 1;
+
+# 5. Identifying the age category with the highest consumption of green vegetables.
+SELECT Age_Category, SUM(Green_Vegetables_Consumption) AS total_green_vegetables_consumption
+FROM Cardio_Data
+GROUP BY Age_Category
+ORDER BY total_green_vegetables_consumption DESC
+LIMIT 2;
+
+# 6. Identifying the age category with the highest consumption of green vegetables and fruits.
+SELECT Age_Category, SUM(Green_Vegetables_Consumption) AS total_green_vegetables_consumption,
+       SUM(Fruit_Consumption) AS total_fruit_consumption
+FROM Cardio_Data
+GROUP BY Age_Category
+ORDER BY total_green_vegetables_consumption DESC
+LIMIT 2;
+
+# 7. Comparing the average fruit and vegetable consumption to weight.
+SELECT Age_Category, AVG(Fruit_Consumption) AS avg_fruit_consumption,
+       AVG(Green_Vegetables_Consumption) AS avg_vegetables_consumption,
+       AVG(Weight_(kg)) AS avg_weight
+FROM Cardio_Data
+GROUP BY Age_Category;
+
+# Identifying the proportion of individuals with heart disease for each exercise status, helps us to understand how exercise impacts risk. Additionally, identifying common smoking history among individuals with diabetes, highlights potential connections between smoking and diabetes.
+# Identifying the age category with the highest consumption of green vegetables and fruits, aids in understanding age-related dietary habits.
+# These SQL queries provide valuable insights into health trends, and risk factors. These insights can be used to inform strategies for patients of health firms, interventions, and for public health initiatives.
