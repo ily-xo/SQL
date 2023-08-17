@@ -1,4 +1,4 @@
-# Creating the table
+/* Creating the table */ 
 CREATE TABLE Orders (
     OrderDate DATE,
     Category VARCHAR(255),
