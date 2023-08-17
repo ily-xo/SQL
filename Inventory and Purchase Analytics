@@ -41,7 +41,7 @@ HAVING COUNT(DISTINCT s.order_id) > 1;
 
 # How this can answer or aid stakeholder inquiries: 
 
-I utilized SQL queries that are aimed to aid inventory management and understand the overall product performance. The first two queries in SQL
+/* I utilized SQL queries that are aimed to aid inventory management and understand the overall product performance. The first two queries in SQL
 provide insights into the current stock levels and products that require immediate attention for replenishment. This information is crucial for ensuring products are available to meet consumer demands. 
 
 Next, I calculated the total revenue and profit for each product category, enabling the identification of which product categories are most financially successful and where adjustments may be needed.
@@ -50,4 +50,4 @@ Next, the average order value per month was identified, this gives a clearer und
 Finally, I identified product categories that were consistently performing well over the last three months, which allows for the allocation of resources and marketing efforts to be sustainable. 
 
 Through analyzing the inventory and sales data, informed decisions about inventory restocking, pricing strategies, and product promotion, 
-can ultimately optimize ops and revenue generation. Furthermore, I made visualizations generating insights to guide the decision-making process.
+can ultimately optimize ops and revenue generation. Furthermore, I made visualizations generating insights to guide the decision-making process. */
